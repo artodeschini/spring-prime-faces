@@ -51,6 +51,21 @@
                                 <f:convertNumber type="currency" currencySymbol="R$ "/>
                             </h:outputText>
                         </p:column>
+
+                        <p:column>
+                            <p:commandButton value="Editar" icon="pi pi-pencil"
+                                             update=":form-modal:new-conta"
+                                             oncomplete="PF('newContaModal').show()"
+                                             process="@this"
+                                             class="ui-button-primary"
+                                             style="margin-right: .5rem">
+                                <f:setPropertyActionListener
+                                        target="#{indexController.contaSelecionada}"
+                                        value="#{conta}"/>
+                                <p:resetInput target=":form-modal:new-conta"/>
+                            </p:commandButton>
+
+                        </p:column>
                     </p:dataTable>
                 </div>
             </div>
