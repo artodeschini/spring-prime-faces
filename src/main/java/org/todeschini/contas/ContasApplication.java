@@ -24,8 +24,9 @@ public class ContasApplication implements ApplicationListener<ContextRefreshedEv
     }
 
     private void mock() {
+        String[] tipos = {"Poupança", "Credito", "Conjunta" };
         for (int i = 1; i < 4; i++) {
-            service.saveConta(Conta.builder().nome("n" + i).tipo("t" + i).saldo((double) i).build());
+            service.saveConta(Conta.builder().nome("n" + i).tipo(tipos[i -1]).saldo((double) i).build());
         }
     }
 }

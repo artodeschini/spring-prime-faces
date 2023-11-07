@@ -31,4 +31,8 @@ A fim de evitar a `boilerplate` codigo repetitivo foi utilizado [lombok](https:/
 
 [implementado](src/main/java/org/todeschini/intentario/model/Produto.java)
 
+## icon 
+
+Veja todos os icones disponivies [icones](https://www.primefaces.org/diamond/icons.xhtml)
+
 

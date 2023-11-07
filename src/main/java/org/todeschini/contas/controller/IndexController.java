@@ -15,6 +15,7 @@ import org.todeschini.contas.servico.IContaService;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @ViewScoped
@@ -52,8 +53,20 @@ public class IndexController {
         if (this.contaSelecionada.getId() == null) {
             service.saveConta(this.contaSelecionada);
             this.carregarDados();
+
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Conta Adicionada"));
+
+        } else {
+
+            this.service.saveConta(this.contaSelecionada);
+            this.carregarDados();
+
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Conta Alterada"));
+
         }
+
+        // reset information
+        this.contaSelecionada = null;
 
         // fecha a modal
         PrimeFaces.current().executeInitScript("PF('newContaModal').hide()");
@@ -63,6 +76,16 @@ public class IndexController {
     }
 
     public void deletar() {
+        this.service.deleteById(this.contaSelecionada.getId());
 
+        // reset information
+        this.contaSelecionada = null;
+
+        this.carregarDados();
+
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Conta Deletada"));
+
+        // atualuza a tabela
+        PrimeFaces.current().ajax().update("form-conta:mensagens", "form-conta:tabela-contas");
     }
 }

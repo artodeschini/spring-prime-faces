@@ -13,13 +13,15 @@
                 <p:growl id="mensagens" showDetail="true"/>
                 <div class="card">
                     <p:menubar>
-                        <p:menuitem value="Inicio" icon="pi pi-fw pi-user"
+                        <p:menuitem value="Inicio" icon="pi pi-fw pi-home"
                                     update=":form-conta:tabela-contas"
                                     actionListener="#{indexController.carregarDados}"/>
                         <p:menuitem value="Nova Conta" icon="pi pi-fw pi-plus"
                                     actionListener="#{indexController.adicionarConta}"
                                     update=":form-modal:new-conta"
                                     oncomplete="PF('newContaModal').show()"/>
+                        <p:menuitem value="Database" icon="pi pi-fw pi-database" url="http://localhost:8080/h2-console"
+                                    target="_blank" />
                     </p:menubar>
                 </div>
                 <div class="card">
@@ -63,6 +65,16 @@
                                         target="#{indexController.contaSelecionada}"
                                         value="#{conta}"/>
                                 <p:resetInput target=":form-modal:new-conta"/>
+
+                            </p:commandButton>
+
+                            <p:commandButton value="Deletar" class="ui-button-danger"
+                                             icion="pi pi-trash"
+                                             process="@this"
+                                             oncomplete="PF('deletarConta').show()">
+                                <f:setPropertyActionListener
+                                        target="#{indexController.contaSelecionada}"
+                                        value="#{conta}"/>
                             </p:commandButton>
 
                         </p:column>
@@ -109,6 +121,20 @@
                 </f:facet>
 
             </p:dialog>
+
+            <p:confirmDialog widgetVar="deletarConta"
+                             showEffect="fade" width="300"
+                             message="Deletar a conta?"
+                             header="Confirmar" severity="warn">
+                <p:commandButton value="Sim" icon="pi pi-check"
+                                 actionListener="#{indexController.deletar}"
+                                 process="@this"
+                                 oncomplete="PF('deletarConta').hide()"/>
+                <p:commandButton value="Não" type="button"
+                                 styleClass="ui-button-secondary"
+                                 icon="pi pi-times"
+                                 onclick="PF('deletarConta').hide()"/>
+            </p:confirmDialog>
 
         </h:form>
     </h:body>
