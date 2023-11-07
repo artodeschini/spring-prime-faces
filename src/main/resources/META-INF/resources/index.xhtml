@@ -1,27 +1,100 @@
 <!DOCTYPE html>
-<html xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+<h:html xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:p="http://primefaces.org/ui">
 
-<h:head>
-    <titulo>Sistema de Gerenciamento de Contas</titulo>
-    <link rel="stylesheet" href="https://unpkg.com/primeflex@^3/primeflex.css"></link>
-    <link rel="stylesheet" href="https://unpkg.com/primeflex/themes/vela-blue.css"></link>
-</h:head>
+    <h:head>
+        <title>Gerenciador de Contas</title>
+        <link rel="stylesheet" href="https://unpkg.com/primeflex@^3/primeflex.css"/>
+    </h:head>
+    <h:body>
+        <h:form id="form-conta">
+            <div class="card">
+                <p:growl id="mensagens" showDetail="true"/>
+                <div class="card">
+                    <p:menubar>
+                        <p:menuitem value="Inicio" icon="pi pi-fw pi-user"
+                                    update=":form-conta:tabela-contas"
+                                    actionListener="#{indexController.carregarDados}"/>
+                        <p:menuitem value="Nova Conta" icon="pi pi-fw pi-plus"
+                                    actionListener="#{indexController.adicionarConta}"
+                                    update=":form-modal:new-conta"
+                                    oncomplete="PF('newContaModal').show()"/>
+                    </p:menubar>
+                </div>
+                <div class="card">
+                    <p:dataTable value="#{indexController.contas}" var="conta" id="tabela-contas" widgetVar="contasTabela">
+                        <f:facet name="header">
+                            <div class="flex justify-content-center flex-wrap card-container yellow-container">
+                                <div class="flex align-items-center justify-content-center
+                                        w-20rem h-4rem bg-yellow-500 font-bold
+                                        text-gray-900 border-round m-2">
+                                    <h3>Sistema de Conta Bancarias</h3>
+                                </div>
+                            </div>
+                        </f:facet>
 
-<h:body>
-    <div class="card">
-        <div class="flex justify-content-center flex-wrap card-container yellow-container">
-            <h3>Sistema de Gerenciamento de Contas</h3>
-        </div>
+                        <p:column headerText="Id">
+                            <h:outputText value="#{conta.id}"/>
+                        </p:column>
 
-        <div class="card">
-            <p:dataTable value="#{indexController.contas}" var="conta">
+                        <p:column headerText="Nome">
+                            <h:outputText value="#{conta.nome}"/>
+                        </p:column>
 
+                        <p:column headerText="Tipo de Conta">
+                            <h:outputText value="#{conta.tipo}"/>
+                        </p:column>
 
-            </p:dataTable>
-        </div>
-    </div>
-</h:body>
+                        <p:column headerText="Saldo">
+                            <h:outputText value="#{conta.saldo}">
+                                <f:convertNumber type="currency" currencySymbol="R$ "/>
+                            </h:outputText>
+                        </p:column>
+                    </p:dataTable>
+                </div>
+            </div>
+        </h:form>
+        <h:form id="form-modal">
+            <p:dialog header="Detalhes da conta" showEffect="fade"
+                      modal="true" widgetVar="newContaModal"
+                      resposive="true">
+                <p:outputPanel id="new-conta" class="ui-fluid">
+                    <div class="field">
+                        <p:outputLabel for="nome">Nome</p:outputLabel>
+                        <p:inputText id="nome"
+                                     value="#{indexController.contaSelecionada.nome}"
+                                     required="true"/>
+                    </div>
+                    <div class="field">
+                        <p:outputLabel for="tipo">Tipo Conta</p:outputLabel>
+                        <p:selectOneMenu id="tipo"
+                                         value="#{indexController.contaSelecionada.tipo}">
+                            <f:selectItem itemLabel="Selecciona" itemValue=""/>
+                            <f:selectItem itemLabel="Poupança" itemValue="Poupança"/>
+                            <f:selectItem itemLabel="Credito" itemValue="Credito"/>
+                            <f:selectItem itemLabel="Conjunta" itemValue="Conjunta"/>
+                        </p:selectOneMenu>
+                    </div>
+                    <div class="field">
+                        <p:outputLabel for="saldo">Saldo</p:outputLabel>
+                        <p:inputNumber id="saldo"
+                                       value="#{indexController.contaSelecionada.saldo}"/>
+                    </div>
+                </p:outputPanel>
 
-</html>
+                <f:facet name="footer">
+                    <p:commandButton value="Salvar" icon="pi pi-check"
+                                     process="new-conta @this"
+                                     actionListener="#{indexController.guardarCuenta}"
+                    />
+                    <p:commandButton value="Cancelar" icon="pi pi-times"
+                                     onclick="PF('newContaModal').hide()"
+                                     class="ui-button-secondary" type="button"/>
+                </f:facet>
+
+            </p:dialog>
+
+        </h:form>
+    </h:body>
+</h:html>
